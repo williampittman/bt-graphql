@@ -1,0 +1,20 @@
+{
+  "name": "bt-graphql",
+  "version": "1.0.0",
+  "description": "braintree payment with GraphQL APIs",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm run start",
+    "dev": "concurrently --kill-others-on-fail \"nodemon index.js\" \"npm run client\""
+  },
+  "author": "WP",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}
