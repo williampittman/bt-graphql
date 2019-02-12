@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -16,6 +16,10 @@ import Icon from "@material-ui/core/Icon";
 import DeleteIcon from "@material-ui/icons/Delete";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import Chip from "@material-ui/core/Chip";
+
+import { Context, initialState, reducer } from "../../store";
+
+import Cart from "../cart/Cart";
 
 let products = [
   {
@@ -72,12 +76,16 @@ const styles = theme => ({
 });
 
 const Product = props => {
+  const { store, dispatch } = useContext(Context);
+  //const [store, dispatch] = useReducer(reducer, initialState);
   const { classes } = props;
+
   const [item, setItem] = useState({
     name: "",
     price: "",
     description: ""
   });
+  // maps through the products array and creates UI
   let displayProducts = products.map(data => {
     return (
       <Card className={classes.card}>
@@ -112,16 +120,36 @@ const Product = props => {
     );
   });
 
+  const CartLink = () => {
+    return (
+      <Link
+        to={{
+          pathname: "/cart",
+          state: { item: item }
+        }}
+      />
+    );
+  };
+
+  //displays button to go to cart, uses react-router-dom Link. need to pass state here
   let displayPay = () => {
+    let location = {
+      pathname: "/cart",
+      state: { item: item }
+    };
+
     if (Object.keys(item.name).length > 0) {
       return (
         <Button
           variant="contained"
           color="secondary"
           className={classes.button}
-          containerElement={<Link to="/cart" />}
+          component={Link}
+          to="/cart"
+          state={item}
+          onClick={() => dispatch({ type: "addItem", item: item })}
         >
-          Go to Cart
+          {item.name} for ${item.price} added to cart
         </Button>
       );
     }
@@ -130,10 +158,11 @@ const Product = props => {
     <Container>
       <Row>
         <Col className="mt-5">
-          <h2>Shopping Cart</h2>
+          <h2>Beef Jerky</h2>
         </Col>
         {displayPay()}
         <Row className="mt-5">{displayProducts}</Row>
+        <div />
       </Row>
     </Container>
   );

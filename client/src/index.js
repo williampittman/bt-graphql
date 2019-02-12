@@ -18,6 +18,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import * as serviceWorker from "./serviceWorker";
 
+import Spinner from "./components/Spinner";
+
 const App = React.lazy(() => import("./App"));
 const Menu = React.lazy(() => import("./components/Menu"));
 const Product = React.lazy(() => import("./pages/product/Product"));
@@ -40,14 +42,17 @@ const Root = () => {
               <NavItem>
                 <NavLink href="/">Home</NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink href="/cart">Cart</NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<Spinner />}>
           <BrowserRouter>
             <Switch>
               <Route exact path="/" component={() => <Product />} />
-              <Route exact path="/cart" component={() => <Cart />} />
+              <Route name="cart" path="/cart" component={() => <Cart />} />
             </Switch>
           </BrowserRouter>
         </React.Suspense>
