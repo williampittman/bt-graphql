@@ -4,7 +4,9 @@ export const initialState = {
   collapsed: true,
   item: {},
   token: "",
-  nonce: ""
+  nonce: "",
+  status: "",
+  id: ""
 };
 
 export const reducer = (state, action) => {
@@ -12,15 +14,24 @@ export const reducer = (state, action) => {
     case "collapse":
       return { collapsed: !state.collapsed };
     case "addItem":
-      return { item: action.item, collapsed: state.collapsed };
+      return {
+        item: action.item,
+        collapsed: state.collapsed
+      };
     case "storeToken":
       return {
         token: action.token,
         collapsed: state.collapsed,
         item: state.item
       };
-    case "storeNonce":
-      return { nonce: action.nonce, ...initialState };
+    case "storePaymentInfo":
+      return {
+        id: action.id,
+        status: action.status,
+        collaped: state.collapsed,
+        token: state.token,
+        item: state.item
+      };
     default:
       return state;
   }

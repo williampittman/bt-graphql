@@ -62,7 +62,23 @@ const Cart = props => {
       dropIn.create(
         {
           authorization: store.token,
-          container: "#dropin-container"
+          container: "#dropin-container",
+          paypal: {
+            flow: "checkout",
+            buttonStyle: {
+              color: "blue",
+              shape: "rect",
+              size: "medium"
+            }
+          },
+          paypalCredit: {
+            flow: "checkout",
+            amount: "10.00",
+            currency: "USD"
+          },
+          venmo: {
+            allowNewBrowserTab: false
+          }
         },
         (createErr, instance) => {
           if (createErr) {
@@ -76,13 +92,36 @@ const Cart = props => {
                   if (requestPaymentMethodErr) {
                     console.log(requestPaymentMethodErr);
                   } else {
-                    dispatch({ type: "storeNonce", nonce: payload.nonce });
-
+                    console.log(`nonce: ${payload.nonce}`);
                     axios
                       .post("/payment/execute_payment", {
                         nonce: payload.nonce
                       })
-                      .then(response => console.log(response))
+                      .then(response => {
+                        console.log(response);
+                        dispatch({
+                          type: "storePaymentInfo",
+                          id:
+                            response.data.data.chargePaymentMethod.transaction
+                              .id,
+                          status:
+                            response.data.data.chargePaymentMethod.transaction
+                              .status
+                        });
+                        return (
+                          <div>
+                            <Paper className={classes.root} elevation={1}>
+                              <Typography variant="h5" component="h3">
+                                Payment Successful!
+                              </Typography>
+                              <Typography component="p">
+                                Transaction Id: {store.id}. Status:{" "}
+                                {store.status}
+                              </Typography>
+                            </Paper>
+                          </div>
+                        );
+                      })
                       .catch(err => console.log(err));
                   }
                 }
@@ -90,6 +129,23 @@ const Cart = props => {
             });
           }
         }
+      );
+    }
+  };
+
+  const showPaymentInfo = () => {
+    if (store.id != "" && store.status != "") {
+      return (
+        <div>
+          <Paper className={classes.root} elevation={1}>
+            <Typography variant="h5" component="h3">
+              Payment Successful!
+            </Typography>
+            <Typography component="p">
+              Transaction Id: {store.id}. Status: {store.status}
+            </Typography>
+          </Paper>
+        </div>
       );
     }
   };
@@ -144,6 +200,9 @@ const Cart = props => {
             </Button>
             {setUpDropIn()}
           </Col>
+        </Row>
+        <Row>
+          <Col md={{ size: 6, offset: 3 }}>{showPaymentInfo()}</Col>
         </Row>
       </Container>
     </div>

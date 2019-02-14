@@ -8,12 +8,12 @@ router.post("/execute_payment", (req, res) => {
   const nonce = req.body.nonce;
   console.log(nonce);
   let mutation = `{
-    "query": "mutation chargePaymentMethod($input: ChargePaymentMethodInput!) {chargePaymentMethod(input: $input) {transaction {idstatus}}}",
+    "query": "mutation chargePaymentMethod($input: ChargePaymentMethodInput!) {chargePaymentMethod(input: $input) {transaction {id status}}}",
     "variables": {
       "input": {
         "paymentMethodId": "${nonce}",
         "transaction": {
-          "amount": "11.23"
+          "amount": "10.00"
         }
       }
     }
