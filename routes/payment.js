@@ -4,20 +4,23 @@ const request = require("request-promise");
 
 const creds = require("../bt-config");
 
-router.post("/getToken", (req, res) => {
+router.post("/execute_payment", (req, res) => {
+  const nonce = req.body.nonce;
+  console.log(nonce);
   let mutation = `{
-    "query": "mutation CreateClientTokenPayload($input: CreateClientTokenInput) {createClientToken(input: $input) {clientToken}}",
+    "query": "mutation chargePaymentMethod($input: ChargePaymentMethodInput!) {chargePaymentMethod(input: $input) {transaction {idstatus}}}",
     "variables": {
-        "input": {
-            "clientToken": {
-                "merchantAccountId": "${creds.merchantAccountId}"
-            }
+      "input": {
+        "paymentMethodId": "${nonce}",
+        "transaction": {
+          "amount": "11.23"
         }
+      }
     }
-}`;
+  }`;
 
-  let bt_init = {
-    getToken: function() {
+  let payment = {
+    submit: function() {
       return request({
         method: "POST",
         uri: "https://payments.sandbox.braintree-api.com/graphql",
@@ -32,14 +35,14 @@ router.post("/getToken", (req, res) => {
     }
   };
 
-  const tokenRequest = () => {
-    bt_init
-      .getToken()
+  const completePayment = () => {
+    return payment
+      .submit()
       .then(response => res.send(response))
-      .catch(err => console.log(err));
+      .catch(err => res.send(err));
   };
 
-  tokenRequest();
+  completePayment();
 });
 
 module.exports = router;
