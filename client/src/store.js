@@ -12,6 +12,30 @@ export const initialState = {
 export const reducer = (state, action) => {
   switch (action.type) {
     case "collapse":
+      return { ...state, collapsed: !state.collapsed };
+    case "addItem":
+      return {
+        ...state,
+        item: action.item
+      };
+    case "storeToken":
+      return {
+        ...state,
+        token: action.token
+      };
+    case "storePaymentInfo":
+      return {
+        ...state,
+        id: action.id,
+        status: action.status
+      };
+    default:
+      return state;
+  }
+};
+
+/*switch (action.type) {
+    case "collapse":
       return { collapsed: !state.collapsed };
     case "addItem":
       return {
@@ -34,7 +58,6 @@ export const reducer = (state, action) => {
       };
     default:
       return state;
-  }
-};
+  }*/
 
 export const Context = React.createContext();

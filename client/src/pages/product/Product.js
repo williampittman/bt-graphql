@@ -1,6 +1,6 @@
-import React, { useState, useReducer, useContext } from "react";
+import React, { useState, useContext, useEffect, useLayoutEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
-import { Link, Redirect, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -12,12 +12,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import Icon from "@material-ui/core/Icon";
-import DeleteIcon from "@material-ui/icons/Delete";
-import NavigationIcon from "@material-ui/icons/Navigation";
 import Chip from "@material-ui/core/Chip";
-
-import { Context, initialState, reducer } from "../../store";
+import { Context } from "../../store";
 
 import Cart from "../cart/Cart";
 
@@ -131,13 +127,7 @@ const Product = props => {
     );
   };
 
-  //displays button to go to cart, uses react-router-dom Link. need to pass state here
   let displayPay = () => {
-    let location = {
-      pathname: "/cart",
-      state: { item: item }
-    };
-
     if (Object.keys(item.name).length > 0) {
       return (
         <Button
@@ -154,6 +144,7 @@ const Product = props => {
       );
     }
   };
+
   return (
     <Container>
       <Row>
@@ -164,6 +155,7 @@ const Product = props => {
         <Row className="mt-5">{displayProducts}</Row>
         <div />
       </Row>
+      <div />
     </Container>
   );
 };

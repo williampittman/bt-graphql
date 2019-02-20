@@ -1,11 +1,6 @@
-import React, { Component, useState } from "react";
-import { HashRouter, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
 
 import "./App.css";
-
-const Menu = React.lazy(() => import("./components/Menu"));
-const Product = React.lazy(() => import("./pages/product/Product"));
-const Counter = require("./components/Counter");
 
 const App = () => {
   const [string, setString] = useState("");

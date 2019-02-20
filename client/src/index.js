@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 import ReactDOM from "react-dom";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import {
@@ -20,11 +20,8 @@ import * as serviceWorker from "./serviceWorker";
 
 import Spinner from "./components/Spinner";
 
-const App = React.lazy(() => import("./App"));
-const Menu = React.lazy(() => import("./components/Menu"));
 const Product = React.lazy(() => import("./pages/product/Product"));
 const Cart = React.lazy(() => import("./pages/cart/Cart"));
-const Counter = React.lazy(() => import("./components/Counter"));
 
 const Root = () => {
   const [store, dispatch] = useReducer(reducer, initialState);

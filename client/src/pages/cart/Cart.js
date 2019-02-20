@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Context, reducer, initialState } from "../../store";
 import { Container, Col, Row } from "reactstrap";
@@ -15,7 +15,7 @@ import axios from "axios";
 
 import GetToken from "../../components/GetToken";
 import "../../index.css";
-import Axios from "axios";
+
 const dropIn = require("braintree-web-drop-in");
 
 const styles = theme => ({
@@ -159,7 +159,69 @@ const Cart = props => {
         </Row>
         <Row className="mt-5">
           <Col sm="12" md={12}>
-            <Paper className={classes.root} elebation={1}>
+            {store.id.length > 0 ? (
+              showPaymentInfo()
+            ) : (
+              <Paper className={classes.root} elebation={1}>
+                <Typography variant="h5" component="h3">
+                  Items in your cart:
+                </Typography>
+                <Table className={classes.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Product</TableCell>
+                      <TableCell align="right">Price</TableCell>
+                      <TableCell align="right">Description</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow key={i}>
+                      <TableCell component="th" scope="row">
+                        {store.item.name}
+                      </TableCell>
+                      <TableCell align="right">{store.item.price}</TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap className={classes.text}>
+                          {store.item.description}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Paper>
+            )}
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col md={4}>{store.token.length > 0 ? null : <GetToken />}</Col>
+          <Col md={8}>
+            <div id="dropin-container" />
+            <div id="button-container">
+              {store.token.length > 0 ? (
+                <Button
+                  color="secondary"
+                  size="lg"
+                  block
+                  id="submit-button"
+                  className="mb-5"
+                >
+                  Submit Payment
+                </Button>
+              ) : null}
+            </div>
+            {setUpDropIn()}
+          </Col>
+        </Row>
+        <Row>
+          <Col md={{ size: 6, offset: 3 }}>{}</Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+/*
+<Paper className={classes.root} elebation={1}>
               <Typography variant="h5" component="h3">
                 Items in your cart:
               </Typography>
@@ -186,28 +248,7 @@ const Cart = props => {
                 </TableBody>
               </Table>
             </Paper>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          <Col md={4}>
-            <GetToken />
-          </Col>
-          <Col md={8}>
-            <div id="dropin-container" />
-            <div id="button-container" />
-            <Button color="secondary" size="lg" block id="submit-button">
-              Submit Payment
-            </Button>
-            {setUpDropIn()}
-          </Col>
-        </Row>
-        <Row>
-          <Col md={{ size: 6, offset: 3 }}>{showPaymentInfo()}</Col>
-        </Row>
-      </Container>
-    </div>
-  );
-};
+*/
 
 Cart.propTypes = {
   classes: PropTypes.object.isRequired
